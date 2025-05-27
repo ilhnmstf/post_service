@@ -32,6 +32,10 @@ spring:
 server:
   port: 9005
 
+user-service:
+  host: localhost
+  port: 9000
+
 springdoc:
   swagger-ui:
     path: /swagger-ui.html
