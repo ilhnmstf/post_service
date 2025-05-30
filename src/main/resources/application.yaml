@@ -21,10 +21,14 @@ spring:
     redis:
       port: 6380
       host: localhost
+      ttl: 7d
+      thread-pool-sizes:
+        post:
+          save: 5
+          saveAll: 5
+          comment: 5
+          like: 5
 
-  jackson:
-    serialization:
-      write-dates-as-timestamps: false
 
   profiles:
     active: prod

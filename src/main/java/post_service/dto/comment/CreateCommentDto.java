@@ -15,7 +15,4 @@ public class CreateCommentDto {
 
     @Min(value = 1, message = "should more than 0")
     private long authorId;
-
-    @Min(value = 1, message = "should more than 0")
-    private long postId;
 }
