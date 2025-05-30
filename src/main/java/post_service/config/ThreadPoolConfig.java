@@ -16,26 +16,30 @@ public class ThreadPoolConfig {
     private final RedisProperties redisProperties;
 
     @Bean
-    public ExecutorService savePostToCache() {
-        log.info("Init thread pool for 'save post to cache' method");
-        return Executors.newFixedThreadPool(redisProperties.getThreadPoolSizes().getPost().getSave());
-    }
-
-    @Bean
     public ExecutorService saveAllPostsToCache() {
-        log.info("Init thread pool for 'save all post to cache' method");
+        loggingInit("save all post to cache");
         return Executors.newFixedThreadPool(redisProperties.getThreadPoolSizes().getPost().getSaveAll());
     }
 
     @Bean
     public ExecutorService commentPostInCache() {
-        log.info("Init thread pool for 'add comment post in cache' method");
+        loggingInit("save all post to cache");
         return Executors.newFixedThreadPool(redisProperties.getThreadPoolSizes().getPost().getComment());
     }
 
     @Bean
     public ExecutorService likePostInCache() {
-        log.info("Init thread pool for 'like post in cache' method");
+        loggingInit("like post in cache");
         return Executors.newFixedThreadPool(redisProperties.getThreadPoolSizes().getPost().getLike());
+    }
+
+    @Bean
+    public ExecutorService saveUserToCache() {
+        loggingInit("save user to cache");
+        return Executors.newFixedThreadPool(redisProperties.getThreadPoolSizes().getUser().getSave());
+    }
+
+    private void loggingInit(String message) {
+        log.info("Init thread pool for '{}' method", message);
     }
 }

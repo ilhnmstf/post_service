@@ -10,8 +10,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import post_service.dto.comment.CreateCommentDto;
 import post_service.dto.post.CreatePostDto;
 import post_service.dto.post.ResponsePostDto;
-// TODO create doc
 
+// TODO create doc
 @Validated
 public interface PostController {
     ResponseEntity<ResponsePostDto> create(@RequestBody @Valid CreatePostDto createPost);

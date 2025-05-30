@@ -9,13 +9,13 @@ import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 
 public interface CachePostRepository {
-    void save(ResponsePostDto post);
+    ResponsePostDto save(long postId, ResponsePostDto post);
 
     void saveAll(Map<Long, ResponsePostDto> posts);
 
-    CompletableFuture<Boolean> saveComment(long postId, ResponseCommentDto comment);
+    CompletableFuture<Boolean> saveCommentOptimistic(long postId, ResponseCommentDto comment);
 
-    CompletableFuture<Boolean> like(long postId);
+    CompletableFuture<Boolean> likeOptimistic(long postId);
 
     Optional<ResponsePostDto> get(long postId);
 

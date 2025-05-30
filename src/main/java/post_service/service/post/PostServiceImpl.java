@@ -39,7 +39,7 @@ public class PostServiceImpl implements PostService {
                 .setContent(createPost.getContent())));
         log.info("Success create post in db and convert to response {}", post);
 
-        cachePostRepository.save(post);
+        cachePostRepository.save(post.getId(), post);
         return post;
     }
 
@@ -53,7 +53,8 @@ public class PostServiceImpl implements PostService {
         log.debug("update post {}", post);
         postRepository.save(post);
         log.info("Success add comment to post in db");
-        return cachePostRepository.saveComment(post.getId(), commentMapper.toDto(post.getComments().get(0))).join();
+        cachePostRepository.saveCommentOptimistic(post.getId(), commentMapper.toDto(post.getComments().get(0)));
+        return true;
     }
 
     @Override
@@ -65,20 +66,21 @@ public class PostServiceImpl implements PostService {
         log.debug("update post {}", post);
         postRepository.save(post);
         log.info("Success add comment to post in db");
-        return cachePostRepository.like(post.getId()).join();
+        cachePostRepository.likeOptimistic(post.getId());
+        return true;
     }
 
     @Override
     public ResponsePostDto get(long postId) {
         return cachePostRepository.get(postId)
-                .orElseGet(() -> postMapper.toDto(findById(postId)));
+                .orElseGet(() -> cachePostRepository.save(postId, postMapper.toDto(findById(postId))));
     }
 
     private Post findById(long postId) {
-        log.debug("Try to find post by id {}", postId);
+        log.debug("Try to find post by id {} in db", postId);
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new EntityNotFoundException("Post with id " + postId + " not exists"));
-        log.debug("find post {}", post);
+        log.debug("find post {} in db", post);
         return post;
     }
 }

@@ -15,6 +15,7 @@ import org.springframework.data.redis.serializer.GenericToStringSerializer;
 import org.springframework.data.redis.serializer.RedisSerializationContext;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 import post_service.dto.post.ResponsePostDto;
+import post_service.dto.user.ResponseUserDto;
 import post_service.properties.RedisProperties;
 
 @Configuration
@@ -64,6 +65,20 @@ public class RedisConfig {
 
         template.afterPropertiesSet();
         log.info("Init post template {}", template);
+        return template;
+    }
+
+    @Bean
+    public RedisTemplate<String, ResponseUserDto> userTemplate() {
+        RedisTemplate<String, ResponseUserDto> template = new RedisTemplate<>();
+        template.setConnectionFactory(redisConnectionFactory());
+        template.setKeySerializer(keySerializer());
+        template.setValueSerializer(valueSerializer());
+        template.setHashKeySerializer(new GenericToStringSerializer<>(Long.class));
+        template.setHashValueSerializer(valueSerializer());
+
+        template.afterPropertiesSet();
+        log.info("Init user template {}", template);
         return template;
     }
 }

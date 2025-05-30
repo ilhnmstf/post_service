@@ -21,14 +21,20 @@ public class RedisProperties {
     @Setter
     public static class ThreadPoolSizes {
         private Post post;
+        private User user;
     }
 
     @Getter
     @Setter
     public static class Post {
-        private int save;
         private int saveAll;
         private int comment;
         private int like;
+    }
+
+    @Getter
+    @Setter
+    public static class User {
+        private int save;
     }
 }

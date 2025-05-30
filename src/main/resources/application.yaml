@@ -24,10 +24,11 @@ spring:
       ttl: 7d
       thread-pool-sizes:
         post:
-          save: 5
           saveAll: 5
           comment: 5
           like: 5
+        user:
+          save: 5
 
 
   profiles:
