@@ -1,29 +1,26 @@
 package post_service.service.like;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import post_service.dto.like.CreateLikeDto;
-import post_service.dto.like.ResponseLikeDto;
+import org.springframework.transaction.annotation.Transactional;
 import post_service.entity.Like;
-import post_service.mapper.LikeMapper;
+import post_service.entity.Post;
 import post_service.repository.db.LikeRepository;
-import post_service.service.post.PostService;
-import post_service.service.user.UserService;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class LikeServiceImpl implements LikeService {
-    private final UserService userService;
-    private final PostService postService;
-    private final LikeMapper likeMapper;
     private final LikeRepository likeRepository;
 
     @Override
-    public ResponseLikeDto create(CreateLikeDto createLike) {
-        userService.validate(createLike.getAuthorId());
-        return likeMapper.toDto(
-                likeRepository.save(new Like()
-                        .setAuthorId(createLike.getAuthorId())
-                        .setPost(postService.findById(createLike.getPostId()))));
+    @Transactional
+    public void create(long authorId, Post post) {
+        log.debug("author with id {} like post {}", authorId, post);
+        Like like = likeRepository.save(new Like()
+                .setAuthorId(authorId)
+                .setPost(post));
+        log.info("like {} was create in db", like);
     }
 }

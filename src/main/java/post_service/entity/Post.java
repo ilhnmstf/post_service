@@ -6,6 +6,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OrderBy;
 import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
@@ -18,6 +19,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -56,6 +58,20 @@ public class Post {
     private List<Like> likes;
 
     @OneToMany(mappedBy = "post", orphanRemoval = true)
+    @OrderBy("createdAt DESC")
     private List<Comment> comments;
 
+    public void addComment(Comment comment) {
+        if (comments == null) {
+            comments = new ArrayList<>();
+        }
+        comments.add(0, comment);
+    }
+
+    public void like(Like like) {
+        if (likes == null) {
+            likes = new ArrayList<>();
+        }
+        likes.add(like);
+    }
 }

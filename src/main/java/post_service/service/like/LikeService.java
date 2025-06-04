@@ -1,8 +1,7 @@
 package post_service.service.like;
 
-import post_service.dto.like.CreateLikeDto;
-import post_service.dto.like.ResponseLikeDto;
+import post_service.entity.Post;
 
 public interface LikeService {
-    ResponseLikeDto create(CreateLikeDto createLike);
+    void create(long authorId, Post post);
 }

@@ -21,10 +21,14 @@ spring:
     redis:
       port: 6380
       host: localhost
-
-  jackson:
-    serialization:
-      write-dates-as-timestamps: false
+      ttl: 7d
+      thread-pool-sizes:
+        post:
+          saveAll: 5
+          comment: 5
+          like: 5
+        user:
+          save: 5
 
   profiles:
     active: prod
@@ -45,3 +49,7 @@ springdoc:
   api-docs:
     path: /v1/api-docs
   default-produces-media-type: application/json
+
+news-feed:
+  count-in-cache: 500
+  count: 10
