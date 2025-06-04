@@ -2,29 +2,31 @@ package post_service.repository.cache.redis;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Repository;
 import post_service.dto.comment.ResponseCommentDto;
 import post_service.dto.post.ResponsePostDto;
 import post_service.repository.cache.CachePostRepository;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
+import java.util.stream.Collectors;
 
 @Repository
 @Slf4j
-public class RedisPostHashRepository extends RedisHashRepository<String, Long, ResponsePostDto> implements CachePostRepository {
+public class RedisPostHashRepository extends RedisHashRepository<Long, ResponsePostDto> implements CachePostRepository {
     private final ExecutorService commentPostInCache;
     private final ExecutorService likePostInCache;
+    private final ExecutorService saveAllPostsToCache;
 
     public RedisPostHashRepository(
-            RedisTemplate<String, ResponsePostDto> postTemplate, ExecutorService commentPostInCache, ExecutorService likePostInCache) {
+            RedisTemplate<String, ResponsePostDto> postTemplate, ExecutorService commentPostInCache,
+            ExecutorService likePostInCache, ExecutorService saveAllPostsToCache) {
         super(postTemplate, "post");
         this.commentPostInCache = commentPostInCache;
         this.likePostInCache = likePostInCache;
+        this.saveAllPostsToCache = saveAllPostsToCache;
     }
 
     @Override
@@ -32,10 +34,12 @@ public class RedisPostHashRepository extends RedisHashRepository<String, Long, R
         return super.save(postId, post);
     }
 
-    @Async("saveAllPostsToCache")
     @Override
-    public void saveAll(Map<Long, ResponsePostDto> posts) {
-        super.saveAll(posts);
+    public List<ResponsePostDto> saveAll(List<ResponsePostDto> posts) {
+        CompletableFuture.runAsync(() ->
+                saveAll(posts.stream()
+                        .collect(Collectors.toMap(ResponsePostDto::getId, post -> post))), saveAllPostsToCache);
+        return posts;
     }
 
     @Override

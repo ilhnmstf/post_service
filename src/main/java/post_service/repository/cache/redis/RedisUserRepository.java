@@ -9,7 +9,7 @@ import post_service.repository.cache.CacheUserRepository;
 import java.util.Optional;
 
 @Repository
-public class RedisUserRepository extends RedisHashRepository<String, Long, ResponseUserDto> implements CacheUserRepository {
+public class RedisUserRepository extends RedisHashRepository<Long, ResponseUserDto> implements CacheUserRepository {
 
     public RedisUserRepository(RedisTemplate<String, ResponseUserDto> userTemplate) {
         super(userTemplate, "user");
@@ -17,17 +17,12 @@ public class RedisUserRepository extends RedisHashRepository<String, Long, Respo
 
     @Async("saveUserToCache")
     @Override
-    public void save(long userId, ResponseUserDto user) {
-        super.save(userId, user);
+    public ResponseUserDto save(long userId, ResponseUserDto user) {
+        return super.save(userId, user);
     }
 
     @Override
     public Optional<ResponseUserDto> get(long userId) {
         return super.get(userId);
-    }
-
-    @Override
-    public boolean isExists(long userId) {
-        return super.isExists(userId);
     }
 }

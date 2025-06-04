@@ -6,9 +6,7 @@ import java.util.Optional;
 
 public interface CacheUserRepository {
 
-    void save(long userId, ResponseUserDto user);
+    ResponseUserDto save(long userId, ResponseUserDto user);
 
     Optional<ResponseUserDto> get(long userId);
-
-    boolean isExists(long userId);
 }

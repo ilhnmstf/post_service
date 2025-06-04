@@ -30,7 +30,6 @@ spring:
         user:
           save: 5
 
-
   profiles:
     active: prod
 
@@ -50,3 +49,7 @@ springdoc:
   api-docs:
     path: /v1/api-docs
   default-produces-media-type: application/json
+
+news-feed:
+  count-in-cache: 500
+  count: 10

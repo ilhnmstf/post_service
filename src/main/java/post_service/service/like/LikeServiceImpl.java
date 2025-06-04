@@ -16,10 +16,11 @@ public class LikeServiceImpl implements LikeService {
 
     @Override
     @Transactional
-    public Like create(long authorId, Post post) {
+    public void create(long authorId, Post post) {
         log.debug("author with id {} like post {}", authorId, post);
-        return likeRepository.save(new Like()
+        Like like = likeRepository.save(new Like()
                 .setAuthorId(authorId)
                 .setPost(post));
+        log.info("like {} was create in db", like);
     }
 }

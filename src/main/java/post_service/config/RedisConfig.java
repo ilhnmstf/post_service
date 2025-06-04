@@ -55,6 +55,20 @@ public class RedisConfig {
     }
 
     @Bean
+    public RedisTemplate<String, Long> feedTemplate() {
+        RedisTemplate<String, Long> template = new RedisTemplate<>();
+        template.setConnectionFactory(redisConnectionFactory());
+        template.setKeySerializer(keySerializer());
+        template.setValueSerializer(valueSerializer());
+        template.setHashKeySerializer(new GenericToStringSerializer<>(Long.class));
+        template.setHashValueSerializer(valueSerializer());
+
+        template.afterPropertiesSet();
+        log.info("Init post template {}", template);
+        return template;
+    }
+
+    @Bean
     public RedisTemplate<String, ResponsePostDto> postTemplate() {
         RedisTemplate<String, ResponsePostDto> template = new RedisTemplate<>();
         template.setConnectionFactory(redisConnectionFactory());
